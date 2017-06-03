@@ -1,0 +1,1 @@
+CREATE TABLE `teste_controleestoque`.`tb_ProdutoCategoria` ( `ID` BIGINT NOT NULL , `Nome` VARCHAR(255) NOT NULL , `Ativo` BIT(2) NOT NULL ) ENGINE = InnoDB;

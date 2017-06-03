@@ -1,0 +1,1 @@
+CREATE TABLE `Teste_ControleEstoque`.`tb_Usuario` ( `ID` BIGINT NOT NULL AUTO_INCREMENT , `Usuario` VARCHAR(255) NOT NULL , `Senha` VARCHAR(255) NOT NULL , `UltimoAcesso` DATE NOT NULL , `Email` VARCHAR(255) NOT NULL , PRIMARY KEY (`ID`)) ENGINE = InnoDB;
