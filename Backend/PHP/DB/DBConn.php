@@ -14,6 +14,7 @@
         {
             self::initialize();
             $dbConn = mysqli_connect('localhost', 'root', '') or die (mysql_error());
+            mysqli_set_charset($dbConn, "utf8");
             mysqli_select_db($dbConn, 'teste_controleestoque') or die (mysql_error());
             return $dbConn;
         }
@@ -24,49 +25,70 @@
             mysqli_close($dbConnParametro);
         }
         /*Insere registro no banco*/
-        public static function Inserir($dbConnParametro)
+        public static function Inserir($dbConnParametro, $nomeTabela, $colunas, $valores)
         {
-            $sql = "INSERT INTO `tb_produto`(`Nome`, `CaminhoImagem`, `Descricao`, `CategoriaID`, `Ativo`) 
-            VALUES ('Teste','teste/teste','lorem ipsum',1,0)";
-
-            if ($dbConnParametro->query($sql) === TRUE) {
-                echo "REGISTRO INSERIDO COM SUCESSO";
-            } else {
-                echo "ERRO: " . $sql . "<br>" . $dbConnParametro->error;
-            }
-        }
-        /*Consulta registro no banco*/
-        public static function Consulta($dbConnParametro)
-        {
-            $sql = "SELECT `ID`, `Nome`, `CaminhoImagem`, `Descricao`, `CategoriaID`, `Ativo` 
-            FROM `tb_produto` WHERE 1";
-            $result = $dbConnParametro->query($sql);
-            if ($result->num_rows > 0) {
-                while($row = $result->fetch_assoc()) {
-                    echo $row["ID"] . "<br>" .  $row["Nome"] . "<br>" .  $row["CaminhoImagem"] . "<br>" .  $row["Descricao"] . "<br>" .  $row["CategoriaID"] . "<br>" .  $row["Ativo"];
+            try 
+            {
+                
+                $sql = "INSERT INTO " . $nomeTabela . "(" . $colunas . ") VALUES (" .  $valores . ")";
+                echo $sql ;
+                if ($dbConnParametro->query($sql) === TRUE) {
+                    return "Registro inserido com sucesso";
+                } else {
+                    return "ERRO: " . $sql . " " . $dbConnParametro->error;
                 }
-            } else {
-                echo "NENHUM RESULTADO";
-            }
-        }
-        /*Atualizar registro no banco*/
-        public static function Atualizar($dbConnParametro)
-        {
-            $sql = "UPDATE tb_produto SET Ativo=1 WHERE ID=1";
-            if ($dbConnParametro->query($sql) === TRUE) {
-                echo "ATUALIZADO COM SUCESSO";
-            } else {
-                echo "ERRO AO ATUALIZAR: " . $dbConnParametro->error;
+            } catch (Exception $e) {
+                return "ERRO: " .  $e->getMessage();
             }
         }
         /*Apagar registro no banco*/
-        public static function Apagar($dbConnParametro)
+        public static function Apagar($dbConnParametro, $nomeTabela, $condicaoCampo  = '')
         {
-            $sql = "DELETE FROM tb_produto WHERE ID=1";
-            if ($dbConnParametro->query($sql) === TRUE) {
-                echo "APAGADO COM SUCESSO";
-            } else {
-                echo "ERRO AO DELETAR: " . $dbConnParametro->error;
+            try 
+            {
+                $sql = "DELETE FROM " . $nomeTabela . " " . $condicaoCampo;
+                if ($dbConnParametro->query($sql) === TRUE) {
+                    return "Apagado com sucesso";
+                } else {
+                    return "ERRO: " . $dbConnParametro->error;
+                }
+            } catch (Exception $e) {
+                return "ERRO: " .  $e->getMessage();
+            }
+        }
+        /*Atualizar registro no banco*/
+        public static function Atualizar($dbConnParametro, $nomeTabela, $valor, $condicaoCampo = '')
+        {
+            try 
+            {
+                $sql = "UPDATE " . $nomeTabela . " SET " . $valor . " " . $condicaoCampo;
+                if ($dbConnParametro->query($sql) === TRUE) {
+                    return "Atualizado com sucesso";
+                } else {
+                    return "ERRO: " . $dbConnParametro->error;
+                }
+            }catch (Exception $e) {
+                return "ERRO: " .  $e->getMessage();
+            }
+        }        
+        /*Consulta registro no banco*/
+        public static function Consultar($dbConnParametro, $nomeTabela, $colunas, $condicaoCampo = '')
+        {
+            try 
+            {
+                $rows = array();
+                $sql = "SELECT " . $colunas . " FROM " . $nomeTabela . " " . $condicaoCampo;
+                $result = $dbConnParametro->query($sql);
+                if ($result->num_rows > 0) {
+                    while($row = $result->fetch_assoc()) {
+                        $rows[] = $row;
+                    }
+                } else {
+                    return "Nenhum resultado";
+                }
+                return json_encode($rows, JSON_UNESCAPED_UNICODE);
+            }catch (Exception $e) {
+                return "ERRO: " .  $e->getMessage();
             }
         }
     }
