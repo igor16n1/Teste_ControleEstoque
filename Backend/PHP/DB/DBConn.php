@@ -28,10 +28,8 @@
         public static function Inserir($dbConnParametro, $nomeTabela, $colunas, $valores)
         {
             try 
-            {
-                
+            { 
                 $sql = "INSERT INTO " . $nomeTabela . "(" . $colunas . ") VALUES (" .  $valores . ")";
-                echo $sql ;
                 if ($dbConnParametro->query($sql) === TRUE) {
                     return "Registro inserido com sucesso";
                 } else {
@@ -83,8 +81,6 @@
                     while($row = $result->fetch_assoc()) {
                         $rows[] = $row;
                     }
-                } else {
-                    return "Nenhum resultado";
                 }
                 return json_encode($rows, JSON_UNESCAPED_UNICODE);
             }catch (Exception $e) {
