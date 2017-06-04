@@ -73,5 +73,18 @@
                 return "ERRO: " .  $e->getMessage();
             }
         }
+
+        public function ValidaUsuarioPorID($usuarioID)
+        {
+            //validações de dados do cliente
+            if($usuarioID == null)
+                return false;
+            $usuarioDB = new UsuarioDB();
+            $colunas = Util::MontarStringComArray($usuarioDB->getColunas());
+            //Verifica se existe um usuário cadastrado
+            if(count(json_decode($usuarioDB->Consultar($colunas, ' WHERE ID=' . $usuarioID), true)) != 1)
+                return false;
+            return true;
+        }
     }
 ?>

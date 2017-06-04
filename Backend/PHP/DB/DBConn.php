@@ -77,7 +77,7 @@
             {
                 $rows = array();
                 $sql = "SELECT " . $colunas . " FROM " . $nomeTabela . " " . $condicaoCampo;
-                //echo $sql;
+                echo $sql;
                 $result = $dbConnParametro->query($sql);
                 if ($result->num_rows > 0) {
                     while($row = $result->fetch_assoc()) {

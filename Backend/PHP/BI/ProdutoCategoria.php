@@ -2,22 +2,17 @@
     /*Classe de negócio para categoria de produto*/
     require_once "../DB/ProdutoCategoria.php";
     require_once "../DB/Usuario.php";
+    require_once "Usuario.php";
     class ProdutoCategoriaBI{
         //Insere uma categoria
         public function InserirCategoria($usuarioID, $Nome)
         {
             try 
             {
-                //validações de dados do cliente
-                if($usuarioID == null)
-                    return 'Usuário inválido';
                 if($Nome == null || $Nome == "")
                     return 'Por favor preencha o nome da categoria';
-                $usuarioDB = new UsuarioDB();
-                $colunas = Util::MontarStringComArray($usuarioDB->getColunas());
-                //Verifica se existe um usuário cadastrado
-                if(count(json_decode($usuarioDB->Consultar($colunas, ' WHERE ID=' . $usuarioID), true)) != 1)
-                   return 'Usuário inválido';
+                $usuarioBI = new UsuarioBI();
+                $usuarioBI->ValidaUsuarioPorID($usuarioID);
                 //Verifica se já existe uma categoria com o mesmo nome
                 $produtoCategoriaDB = new ProdutoCategoriaDB();
                 $colunasProdutoCategoria = Util::MontarStringComArray($produtoCategoriaDB->getColunas());
@@ -43,16 +38,10 @@
         {
             try 
             {
-                //validações de dados do cliente
-                if($usuarioID == null)
-                    return 'Usuário inválido';
                 if($Nome == null || $Nome == "")
                     return 'Por favor preencha o nome da categoria';
-                $usuarioDB = new UsuarioDB();
-                $colunas = Util::MontarStringComArray($usuarioDB->getColunas());
-                //Verifica se existe um usuário cadastrado
-                if(count(json_decode($usuarioDB->Consultar($colunas, ' WHERE ID=' . $usuarioID), true)) != 1)
-                   return 'Usuário inválido';
+                $usuarioBI = new UsuarioBI();
+                $usuarioBI->ValidaUsuarioPorID($usuarioID);
                 //Exclui a categoria
                 $produtoCategoriaDB = new ProdutoCategoriaDB();
                 $colunasProdutoCategoria = Util::MontarStringComArray($produtoCategoriaDB->getColunas());
@@ -71,16 +60,10 @@
         {
             try 
             {
-                //validações de dados do cliente
-                if($usuarioID == null)
-                    return 'Usuário inválido';
                 if($Nome == null || $Nome == "")
                     return 'Por favor preencha o nome da categoria';
-                $usuarioDB = new UsuarioDB();
-                $colunas = Util::MontarStringComArray($usuarioDB->getColunas());
-                //Verifica se existe um usuário cadastrado
-                if(count(json_decode($usuarioDB->Consultar($colunas, ' WHERE ID=' . $usuarioID), true)) != 1)
-                    return 'Usuário inválido';
+                $usuarioBI = new UsuarioBI();
+                $usuarioBI->ValidaUsuarioPorID($usuarioID);
                 //Verifica se já existe uma categoria com o nome
                 $produtoCategoriaDB = new ProdutoCategoriaDB();
                 $colunasProdutoCategoria = Util::MontarStringComArray($produtoCategoriaDB->getColunas());
@@ -104,11 +87,24 @@
                 return "ERRO: " .  $e->getMessage();
             }
         }
-
+        //Consultar categorias
+        public function ConsultarCategorias($Nome = '', $Ativo = 0)
+        {
+            try 
+            {
+                $produtoCategoriaDB = new ProdutoCategoriaDB();
+                $colunasProdutoCategoria = Util::MontarStringComArray($produtoCategoriaDB->getColunas());
+                $produtoAtivo = '';
+                if($Ativo != 2)//Caso o ID do Ativo seja 2 traga os produtos ativos e inativos
+                    $produtoAtivo = " AND Ativo=". $Ativo;
+                $resultado = $produtoCategoriaDB->Consultar($colunasProdutoCategoria, ' WHERE Nome LIKE'. "'%" . $Nome . "%'" . $produtoAtivo);
+                if(count(json_decode($resultado, true)) > 0)
+                    return $resultado;
+                else
+                    return 'Nehum resultado encontrado para ' . $Nome;
+            }catch (Exception $e) {
+                return "ERRO: " .  $e->getMessage();
+            }
+        }
     }
-    
-    $a = new ProdutoCategoriaBI();
-    //echo $a->InserirCategoria(3, "'Livros'");
-    //echo $a->ExcluirCategoria(3, "'Livros'");
-    echo $a->AtualizarCategoria(3, "'Livros'", 1);
 ?>
