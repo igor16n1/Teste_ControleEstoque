@@ -56,12 +56,36 @@
                     return 'Produto cadastrado com sucesso';
                 else
                     return 'Não foi possível cadastrar o produto';
-        
             }catch (Exception $e) {
                 return "ERRO: " .  $e->getMessage();
             }
         }
+        /*Exclui um produto*/
+        public function Excluir($usuarioID, $ID, $CategoriaID)
+        {
+            if($CategoriaID == null || $CategoriaID == 0)
+                return 'Por favor selecione uma categoria';
+            if($ID == null || $ID == 0)
+                return 'ID do produto inválido';
+            $usuarioBI = new UsuarioBI();
+            if(!$usuarioBI->ValidarUsuarioPorID($usuarioID))
+                return 'Usuário não encontrado';
+            $ProdutoCategoriaBI = new ProdutoCategoriaBI();
+            if(!$ProdutoCategoriaBI->ValidarCategoriaProdutoPorID($CategoriaID))
+                return 'Categoria não registrada';
+            //Exclui o produto
+            $produtoDB = new ProdutoDB();
+            $colunasProduto = Util::MontarStringComArray($produtoDB->getColunas());
+            $produtoDB->Apagar(' WHERE ID=' . $ID . ' AND CategoriaID=' . $CategoriaID);
+            //Verifica se o produto foi excluído
+            if(count(json_decode($produtoDB->Consultar($colunasProduto, ' WHERE ID=' . $ID . ' AND CategoriaID=' . $CategoriaID), true)) == 0)
+                return 'Produto excluído com sucesso';
+            else
+                return 'Não foi possível excluir o produto';
+        }
     }
+    
     $a = new ProdutoBI();
     $a->Inserir(3, "Triste Visionário", 9, 'C:\Users\IGOR\Downloads\imagem.jpg', "jpg");
+    //$a->Excluir(3, 91, 9);
 ?>
