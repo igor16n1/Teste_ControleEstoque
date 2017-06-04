@@ -32,7 +32,34 @@
                  if(count(json_decode($produtoCategoriaDB->Consultar($colunasProdutoCategoria, ' WHERE Nome=' . $Nome), true)) == 1)
                     return 'Categoria de produto cadastrada com sucesso';
                  else
-                    return 'Não foi possível realizar o cadastro';
+                    return 'Não foi possível cadastrar a categoria';
+            }catch (Exception $e) {
+                return "ERRO: " .  $e->getMessage();
+            }
+        }
+        public function ExcluirCategoria($usuarioID, $Nome)
+        {
+            try 
+            {
+                //validações de dados do cliente
+                if($usuarioID == null)
+                    return 'Usuário inválido';
+                if($Nome == null || $Nome == "")
+                    return 'Por favor preencha o nome da categoria';
+                $usuarioDB = new UsuarioDB();
+                $colunas = Util::MontarStringComArray($usuarioDB->getColunas());
+                //Verifica se existe um usuário cadastrado
+                if(count(json_decode($usuarioDB->Consultar($colunas, ' WHERE ID=' . $usuarioID), true)) != 1)
+                   return 'Usuário inválido';
+                //Exclui a categoria
+                $produtoCategoriaDB = new ProdutoCategoriaDB();
+                $colunasProdutoCategoria = Util::MontarStringComArray($produtoCategoriaDB->getColunas());
+                $produtoCategoriaDB->Excluir(' WHERE Nome=' . $Nome);
+                //Verifica se a categoria foi excluída
+                if(count(json_decode($produtoCategoriaDB->Consultar($colunasProdutoCategoria, ' WHERE Nome=' . $Nome), true)) == 0)
+                    return 'Categoria de produto excluída com sucesso';
+                else
+                    return 'Não foi possível excluir a categoria';
             }catch (Exception $e) {
                 return "ERRO: " .  $e->getMessage();
             }
@@ -41,4 +68,5 @@
 
     $a = new ProdutoCategoriaBI();
     echo $a->InserirCategoria(3, "'Livros'");
+    echo $a->ExcluirCategoria(3, "'Livros'");
 ?>

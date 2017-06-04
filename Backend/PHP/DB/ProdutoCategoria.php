@@ -20,7 +20,7 @@
                 return "ERRO: " .  $e->getMessage();
             }
         }
-        public function Apagar($condicaoCampo = '')
+        public function Excluir($condicaoCampo = '')
         {
             try 
             {
