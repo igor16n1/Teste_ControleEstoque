@@ -60,6 +60,7 @@
             try 
             {
                 $sql = "UPDATE " . $nomeTabela . " SET " . $valor . " " . $condicaoCampo;
+                echo $sql;
                 if ($dbConnParametro->query($sql) === TRUE) {
                     return "Atualizado com sucesso";
                 } else {
