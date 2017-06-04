@@ -73,11 +73,11 @@
                 return "ERRO: " .  $e->getMessage();
             }
         }
-
-        public function ValidaUsuarioPorID($usuarioID)
+        //Valida usuário por ID
+        public function ValidarUsuarioPorID($usuarioID)
         {
             //validações de dados do cliente
-            if($usuarioID == null)
+            if($usuarioID == null || $usuarioID == 0)
                 return false;
             $usuarioDB = new UsuarioDB();
             $colunas = Util::MontarStringComArray($usuarioDB->getColunas());

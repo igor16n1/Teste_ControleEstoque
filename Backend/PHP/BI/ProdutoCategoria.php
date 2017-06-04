@@ -1,7 +1,7 @@
 <?php
     /*Classe de negócio para categoria de produto*/
     require_once "../DB/ProdutoCategoria.php";
-    require_once "../DB/Usuario.php";
+    //require_once "../DB/Usuario.php";
     require_once "Usuario.php";
     class ProdutoCategoriaBI{
         //Insere uma categoria
@@ -12,7 +12,8 @@
                 if($Nome == null || $Nome == "")
                     return 'Por favor preencha o nome da categoria';
                 $usuarioBI = new UsuarioBI();
-                $usuarioBI->ValidaUsuarioPorID($usuarioID);
+                if(!$usuarioBI->ValidarUsuarioPorID($usuarioID))
+                    return 'Usuário não encontrado';
                 //Verifica se já existe uma categoria com o mesmo nome
                 $produtoCategoriaDB = new ProdutoCategoriaDB();
                 $colunasProdutoCategoria = Util::MontarStringComArray($produtoCategoriaDB->getColunas());
@@ -41,7 +42,8 @@
                 if($Nome == null || $Nome == "")
                     return 'Por favor preencha o nome da categoria';
                 $usuarioBI = new UsuarioBI();
-                $usuarioBI->ValidaUsuarioPorID($usuarioID);
+                if(!$usuarioBI->ValidarUsuarioPorID($usuarioID))
+                    return 'Usuário não encontrado';
                 //Exclui a categoria
                 $produtoCategoriaDB = new ProdutoCategoriaDB();
                 $colunasProdutoCategoria = Util::MontarStringComArray($produtoCategoriaDB->getColunas());
@@ -63,7 +65,8 @@
                 if($Nome == null || $Nome == "")
                     return 'Por favor preencha o nome da categoria';
                 $usuarioBI = new UsuarioBI();
-                $usuarioBI->ValidaUsuarioPorID($usuarioID);
+                if(!$usuarioBI->ValidarUsuarioPorID($usuarioID))
+                    return 'Usuário não encontrado';
                 //Verifica se já existe uma categoria com o nome
                 $produtoCategoriaDB = new ProdutoCategoriaDB();
                 $colunasProdutoCategoria = Util::MontarStringComArray($produtoCategoriaDB->getColunas());
@@ -105,6 +108,15 @@
             }catch (Exception $e) {
                 return "ERRO: " .  $e->getMessage();
             }
+        }
+        //Valida categoria do produto por ID
+        public function ValidarCategoriaProdutoPorID($CategoriaID)
+        {
+            $produtoCategoriaDB = new ProdutoCategoriaDB();
+            $colunasProdutoCategoria = Util::MontarStringComArray($produtoCategoriaDB->getColunas());      
+            if(count(json_decode($produtoCategoriaDB->Consultar($colunasProdutoCategoria, ' WHERE ID=' . $CategoriaID), true)) == 0) 
+                return false;
+            return true;
         }
     }
 ?>

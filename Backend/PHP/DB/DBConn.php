@@ -30,6 +30,7 @@
             try 
             { 
                 $sql = "INSERT INTO " . $nomeTabela . "(" . $colunas . ") VALUES (" .  $valores . ")";
+                //echo $sql;
                 if ($dbConnParametro->query($sql) === TRUE) {
                     return "Registro inserido com sucesso";
                 } else {
@@ -60,7 +61,7 @@
             try 
             {
                 $sql = "UPDATE " . $nomeTabela . " SET " . $valor . " " . $condicaoCampo;
-                echo $sql;
+                //echo $sql;
                 if ($dbConnParametro->query($sql) === TRUE) {
                     return "Atualizado com sucesso";
                 } else {
@@ -77,7 +78,7 @@
             {
                 $rows = array();
                 $sql = "SELECT " . $colunas . " FROM " . $nomeTabela . " " . $condicaoCampo;
-                echo $sql;
+                //echo $sql;
                 $result = $dbConnParametro->query($sql);
                 if ($result->num_rows > 0) {
                     while($row = $result->fetch_assoc()) {
