@@ -1,1 +1,1 @@
-CREATE TABLE `teste_controleestoque`.`tb_ProdutoCategoria` ( `ID` BIGINT NOT NULL , `Nome` VARCHAR(255) NOT NULL COLLATE utf8_unicode_ci, `Ativo` BIT(2) NOT NULL ) ENGINE = InnoDB;
+CREATE TABLE `teste_controleestoque`.`tb_ProdutoCategoria` ( `ID` BIGINT NOT NULL AUTO_INCREMENT , `Nome` VARCHAR(255) NOT NULL COLLATE utf8_unicode_ci, `Ativo` BIT(2) NOT NULL, PRIMARY KEY (`ID`)) ENGINE = InnoDB;

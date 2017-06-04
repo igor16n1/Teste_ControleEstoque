@@ -1,7 +1,7 @@
 <?php
     /*Classe de acesso ao usuário pelo banco*/
-    include("DBConn.php");
-    include("../Util.php");
+    require_once "DBConn.php";
+    require_once "../Util.php";
     class UsuarioDB
     {
         private $colunas = array("ID", "Usuario", "Senha", "Email");

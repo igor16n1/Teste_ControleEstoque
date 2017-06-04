@@ -1,6 +1,6 @@
 <?php
     /*Classe de negócio para usuário*/
-    include("../DB/Usuario.php");
+    require_once "../DB/Usuario.php";
     class UsuarioBI{
         //Insere o cadastro do usuário (todos os campos são preenchidos)
         public function InserirCadastro($usuario, $senha, $repetirSenha, $email)
@@ -74,9 +74,4 @@
             }
         }
     }
- 
-
-    $a = new UsuarioBI();
-    //echo $a->InserirCadastro("'Igor'", "'123456'", "'123456'", "igor@gmail.com");
-    $a->Login("'Igor'", "'12345'", "igor@gmail.com");
 ?>
