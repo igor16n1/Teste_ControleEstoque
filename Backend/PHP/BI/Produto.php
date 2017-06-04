@@ -163,10 +163,41 @@
                 return "ERRO: " .  $e->getMessage();
             }
         }
+        //Consultar produtos
+        public function ConsultarProdutos($Nome = '', $Ativo = 0, $CategoriaID = 0)
+        {
+            try 
+            {
+                $produtoDB = new ProdutoDB();
+                $colunasProduto= Util::MontarStringComArray($produtoDB->getColunas());
+                $produtoNome = '';
+                if($Nome != '')//Caso o nome esteja ativo
+                    $produtoNome= ' Nome LIKE'. "'%" . $Nome . "%'";
+                $produtoAtivo = '';
+                if($Ativo != 2)//Caso o ID do Ativo seja 2 traga os produtos ativos e inativos
+                {
+                    if($Nome != '')
+                        $produtoAtivo =  ' AND ';
+                    $produtoAtivo = $produtoAtivo . " Ativo=". $Ativo;
+                }
+                $produtoCategoria = '';
+                if($CategoriaID != 0)//Caso o ID da categoria seja diferente de zero
+                {
+                    if($Nome != '' || $Ativo != 2)
+                        $produtoCategoria = ' AND ';
+                    $produtoCategoria = $produtoCategoria . " CategoriaID=". $CategoriaID;
+                }
+                $clausulaWhere = '';
+                if($Nome != '' || $Ativo != 2 || $CategoriaID = 0)
+                    $clausulaWhere = ' WHERE '; 
+                $resultado = $produtoDB->Consultar($colunasProduto, $clausulaWhere . $produtoNome . $produtoAtivo . $produtoCategoria);
+                if(count(json_decode($resultado, true)) > 0)
+                    return $resultado;
+                else
+                    return 'Nehum resultado encontrado para ' . $Nome;
+            }catch (Exception $e) {
+                return "ERRO: " .  $e->getMessage();
+            }
+        }
     }
-    
-    $a = new ProdutoBI();
-    //$a->Inserir(3, "Triste Visionário", 9, 'C:\Users\IGOR\Downloads\imagem.jpg', "jpg");
-    //$a->Excluir(3, 91, 9);
-    $a->Atualizar(3, 92, "'Novo Nome'", 'C:\\\\xampp\\\htdocs\\\Teste_ControleEstoque\\\Backend\\\PHP\\\Img\\\TristeVisionrio.jpg', "'Nova descrição'", 9, 1, "jpg");
 ?>
